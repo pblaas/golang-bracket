@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<title>Patrick's GO Bracket</title>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="/public/jquery.bracket.min.css">
+<link rel="stylesheet" href="/public/jquery.bracket-site.css">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script src="/public/jquery.bracket.min.js"></script>
+<script type="text/javascript">
+$(function() {
+    var demos = ['minimal']
+    $.each(demos, function(i, d){
+      var demo = $('div#'+d)
+      $('<div class="demo"></div>').appendTo(demo)
+    })
+  })
+</script>
+    <style type="text/css">
+      body {
+        background: #eee;
+        font-family: Helvetica, Arial, sans-serif;
+      }
+      #footer {
+        font-size: 13px;
+        color: #aaa;
+        text-align: center;
+        width: 600px;
+        margin: 30px auto;
+        padding: 0.5em;
+        text-shadow: 0px 1px 1px #fff;
+        border-top: 1px dotted #ddd;
+      }
+      #footer a {
+        color: #0af;
+        text-decoration: none;
+      }
+    </style>
+
+
+</head>
+
+<div id="minimal">
+  <b>Serie:Xxxx</b>
+
+  <script type="text/javascript">
+	var testdata = {
+	    {{ range . }}
+  		{text: {{ .name }}, weight: {{ .serie }} } ,
+ 	    {{ end }}
+	}
+  </script>
+  <script type="text/javascript">
+  var minimalData = {
+      teams : [
+        ["Team 1", "Team 2"], /* first matchup */
+        ["Team 3", "Team 4"],  /* second matchup */
+        ["Team 5", "Team 6"],  /* second matchup */
+        ["Team 7", "Team 8"],  /* second matchup */
+      ],
+      results : [
+        [[1,0], [0,1], [1,0], [0,1]],       /* first round */
+        [[1,0], [0,1]],        /* second round */
+        [[1,0], [0,1]],        /* second round */
+      ]
+    }
+
+  $(function() {
+      $('#minimal .demo').bracket({
+        init: minimalData /* data to initialize the bracket with */ })
+    })
+  </script>
+</div>
+
+ <div id="footer">
+      <a href="https://github.com/pblaas/golang-bracket">Go Bracket</a> is an open-source <a href="http://golang.org">Go language</a> App by
+      <strong><a href="https://github.com/pblaas">Pblaas</a></strong> based on: <br>
+      <a href="https://golang.org">Go language</a> |
+      <a href="https://www.mongodb.org">MongoDB</a> |
+      <a href="https://labix.org/mgo">mgo driver</a> |
+      <a href="http://getbootstrap.com/css/">CSS boostrap</a> |
+      <a href="https://github.com/teijo/jquery-bracket">Teijo bracket library</a> 
+ </div>
+
+</html>
