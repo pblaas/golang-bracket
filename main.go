@@ -6,6 +6,7 @@ import (
 	"gopkg.in/mgo.v2"
 	//"gopkg.in/mgo.v2/bson"
 	"html/template"
+	"log"
 	"net/http"
 	"path"
 )
@@ -104,6 +105,6 @@ func main() {
 	r.HandleFunc("/bracket/{serie}", BracketShowHandler)
 	r.HandleFunc("/", Bracket)
 
-	fmt.Println("Server started!")
+	log.Println("Server started...")
 	http.ListenAndServe(":3099", r)
 }
