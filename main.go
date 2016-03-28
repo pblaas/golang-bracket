@@ -11,9 +11,9 @@ import (
 )
 
 type Player struct {
-	id    string `bson:"_id"`
-	name  string `bson:"name"`
-	serie string `bson:"serie"`
+	Id    string `bson:"_id"`
+	Nick  string `bson:"nick"`
+	Serie string `bson:"serie"`
 }
 
 type hookedResponseWriter struct {
@@ -62,7 +62,8 @@ func Bracket(rw http.ResponseWriter, r *http.Request) {
 func BracketShowHandler(rw http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	serie := params["serie"]
-	rw.Write([]byte("Serie " + serie))
+
+	fmt.Println("serie" + serie)
 	session, err := mgo.Dial("localhost")
 	if err != nil {
 		panic(err)
