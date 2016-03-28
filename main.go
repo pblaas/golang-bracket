@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gorilla/mux"
 	"gopkg.in/mgo.v2"
-	//"gopkg.in/mgo.v2/bson"
+	"gopkg.in/mgo.v2/bson"
 	"html/template"
 	"log"
 	"net/http"
@@ -76,7 +76,7 @@ func BracketShowHandler(rw http.ResponseWriter, r *http.Request) {
 
 	c := session.DB("spdb").C("match")
 
-	query := c.Find(nil)
+	query := c.Find(bson.M{"serie": serie})
 	var players []Player
 	if err := query.All(&players); err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
