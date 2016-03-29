@@ -11,10 +11,15 @@ import (
 	"path"
 )
 
-type Player struct {
-	Id    string `bson:"_id"`
-	Nick  string `bson:"nick"`
-	Serie string `bson:"serie"`
+type MatchID struct {
+	Id        bson.ObjectId `bson:"_id"`
+	Serie     string        `bson:"serie"`
+	Round     int           `bson:"round"`
+	P1        string        `bson:"p1"`
+	P2        string        `bson:"p2"`
+	Timestamp string        `bson:"timestamp"`
+	P1_score  int           `bson:"p1_score"`
+	P2_score  int           `bson:"p2_score"`
 }
 
 type hookedResponseWriter struct {
@@ -46,14 +51,13 @@ func (nfh NotFoundHook) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 }
 
 func Bracket(rw http.ResponseWriter, r *http.Request) {
-	player := Player{"1", "2", "3"}
 	fp := path.Join("templates", "index.html")
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := tmpl.Execute(rw, player); err != nil {
+	if err := tmpl.Execute(rw, ""); err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -64,7 +68,7 @@ func BracketShowHandler(rw http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	serie := params["serie"]
 
-	fmt.Println("serie" + serie)
+	log.Println("serie" + serie)
 	session, err := mgo.Dial("localhost")
 	if err != nil {
 		panic(err)
@@ -76,9 +80,9 @@ func BracketShowHandler(rw http.ResponseWriter, r *http.Request) {
 
 	c := session.DB("spdb").C("match")
 
-	query := c.Find(bson.M{"serie": serie})
-	var players []Player
-	if err := query.All(&players); err != nil {
+	query := c.Find(bson.M{"serie": serie, "round": 1})
+	var matchid []MatchID
+	if err := query.All(&matchid); err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -88,7 +92,7 @@ func BracketShowHandler(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := tmpl.Execute(rw, players); err != nil {
+	if err := tmpl.Execute(rw, matchid); err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}

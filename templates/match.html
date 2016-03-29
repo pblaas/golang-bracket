@@ -48,13 +48,15 @@ $(function() {
   <script type="text/javascript">
   var minimalData = {
       teams : [ 
-	[
- 	{{ range . }}
-	      "{{ .Nick }}", 
+       {{ range . }}
+	      ["{{ .P1 }}", "{{ .P2 }}"], 
        {{ end }}
-        ],
       ],
       results : [
+		 [
+       		  {{ range . }} ["{{ .P1_score }}", "{{ .P2_score }}"], {{ end }}
+	         ]
+
       ]
     }
 
