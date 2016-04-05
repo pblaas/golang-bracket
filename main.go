@@ -22,6 +22,14 @@ type MatchID struct {
 	P2_score  int           `bson:"p2_score"`
 }
 
+type ScorecardID struct {
+	Id        bson.ObjectId `bson:"_id"`
+	Serie     string        `bson:"serie"`
+	Scorecard int           `bson:"scorecard"`
+	Players   [][]string    `bson:"players"`
+	Results   [][][]int     `bson:"results"`
+}
+
 type hookedResponseWriter struct {
 	http.ResponseWriter
 	ignore bool
@@ -80,9 +88,9 @@ func BracketShowHandler(rw http.ResponseWriter, r *http.Request) {
 
 	c := session.DB("spdb").C("match")
 
-	query := c.Find(bson.M{"serie": serie, "round": 1})
-	var matchid []MatchID
-	if err := query.All(&matchid); err != nil {
+	query := c.Find(bson.M{"serie": serie, "scorecard": 1})
+	var scorecardid []ScorecardID
+	if err := query.All(&scorecardid); err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -92,7 +100,7 @@ func BracketShowHandler(rw http.ResponseWriter, r *http.Request) {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := tmpl.Execute(rw, matchid); err != nil {
+	if err := tmpl.Execute(rw, scorecardid); err != nil {
 		http.Error(rw, err.Error(), http.StatusInternalServerError)
 		return
 	}
