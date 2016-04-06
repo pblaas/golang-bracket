@@ -4,20 +4,8 @@
 <title>Patrick's GO Bracket</title>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="/public/jquery.bracket.min.css">
-<link rel="stylesheet" href="/public/jquery.bracket-site.css">
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<script src="/public/jquery.bracket.min.js"></script>
-<script type="text/javascript">
-$(function() {
-    var demos = ['minimal']
-    $.each(demos, function(i, d){
-      var demo = $('div#'+d)
-      $('<div class="demo"></div>').appendTo(demo)
-    })
-  })
-</script>
     <style type="text/css">
       body {
         background: #eee;
@@ -42,30 +30,23 @@ $(function() {
 
 </head>
 
-<div id="minimal">
-  <b>Serie:
-  	{{ range . }}
-  		{{ .Serie }}
-	{{ end }}</b>
+<form action="/SignupSubmit" method="POST" class="form-horizontal">
+  <div class="form-group">
+    <label for="InputUsername" class="col-sm-4 control-label">Username</label>
+    <div class="col-xs-3">
+    <input type="text" class="form-control" name="Username" id="InputUsername" placeholder="Username">
+    </div>
+  </div>
 
-  <script type="text/javascript">
-  var minimalData = {
-      teams :  
-       {{ range . }}
-	      {{ .Players }}, 
-       {{ end }}
-       
-      results : [
-       		  {{ range . }} {{ .Results }} {{ end }},
-      ]
-    }
+  <div class="form-group">
+    <label for="InputEmail" class="col-sm-4 control-label">Email address</label>
+    <div class="col-xs-3">
+    <input type="email" class="form-control" name="Email" id="InputEmail" placeholder="Email">
+    <button type="submit" class="btn btn-default">Submit</button>
+    </div>
+  </div>
+</form>
 
-  $(function() {
-      $('#minimal .demo').bracket({
-        init: minimalData /* data to initialize the bracket with */ })
-    })
-  </script>
-</div>
 
  <div id="footer">
       <a href="https://github.com/pblaas/golang-bracket">Go Bracket</a> is an open-source <a href="http://golang.org">Go language</a> App by

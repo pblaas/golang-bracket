@@ -9,6 +9,8 @@ import (
 	"log"
 	"net/http"
 	"path"
+	"strings"
+	"time"
 )
 
 type MatchID struct {
@@ -23,11 +25,25 @@ type MatchID struct {
 }
 
 type ScorecardID struct {
-	Id        bson.ObjectId `bson:"_id"`
-	Serie     string        `bson:"serie"`
-	Scorecard int           `bson:"scorecard"`
-	Players   [][]string    `bson:"players"`
-	Results   [][][]int     `bson:"results"`
+	Id               bson.ObjectId `bson:"_id"`
+	Serie            string        `bson:"serie"`
+	Scorecard        int           `bson:"scorecard"`
+	Bracketgame      string        `bson:"bracketgame"`
+	Bracketname      string        `bson:"bracketname"`
+	Bracketorganizer string        `bson:"bracketorganizer"`
+	Bracketapi       string        `bson:"bracketapi"`
+	Raffle           int           `bson:"raffle"`
+	completed        int           `bson:"completed"`
+	Players          [][]string    `bson:"players"`
+	Results          [][][]int     `bson:"results"`
+}
+
+type SignupForm struct {
+	ID            bson.ObjectId `bson:"_id,omitempty"`
+	Playername    string        `form:"Username"`
+	Email         string        `form:"Email"`
+	Signupaddress string
+	Signupdate    time.Time
 }
 
 type hookedResponseWriter struct {
@@ -72,7 +88,65 @@ func Bracket(rw http.ResponseWriter, r *http.Request) {
 
 }
 
-func BracketShowHandler(rw http.ResponseWriter, r *http.Request) {
+func SignUp(rw http.ResponseWriter, r *http.Request) {
+	fp := path.Join("templates", "signup.html")
+	tmpl, err := template.ParseFiles(fp)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := tmpl.Execute(rw, ""); err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func CreateBracket(rw http.ResponseWriter, r *http.Request) {
+	fp := path.Join("templates", "createbracket.html")
+	tmpl, err := template.ParseFiles(fp)
+	if err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := tmpl.Execute(rw, ""); err != nil {
+		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+func SignupSubmit(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+	session, err := mgo.Dial("localhost")
+	if err != nil {
+		panic(err)
+	}
+	defer session.Close()
+
+	//Optional. Switch the session to monotonic behavior
+	session.SetMode(mgo.Monotonic, true)
+
+	c := session.DB("spdb").C("match")
+	if r.FormValue("Email") != "" && r.FormValue("Username") != "" {
+
+		s := strings.Split(r.RemoteAddr, ":")
+		ip := s[0]
+		entry := &SignupForm{
+			Playername:    r.FormValue("Username"),
+			Email:         r.FormValue("Email"),
+			Signupaddress: ip,
+			Signupdate:    time.Now(),
+		}
+		err = c.Insert(entry)
+		if err != nil {
+			log.Fatal(err)
+
+		}
+		http.Redirect(w, r, "/", http.StatusTemporaryRedirect)
+	}
+
+	http.Redirect(w, r, "/signup", http.StatusTemporaryRedirect)
+}
+
+func BracketShowHandler(w http.ResponseWriter, r *http.Request) {
 	params := mux.Vars(r)
 	serie := params["serie"]
 
@@ -91,17 +165,17 @@ func BracketShowHandler(rw http.ResponseWriter, r *http.Request) {
 	query := c.Find(bson.M{"serie": serie, "scorecard": 1})
 	var scorecardid []ScorecardID
 	if err := query.All(&scorecardid); err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 	fp := path.Join("templates", "match.html")
 	tmpl, err := template.ParseFiles(fp)
 	if err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
-	if err := tmpl.Execute(rw, scorecardid); err != nil {
-		http.Error(rw, err.Error(), http.StatusInternalServerError)
+	if err := tmpl.Execute(w, scorecardid); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
 }
@@ -115,6 +189,9 @@ func main() {
 	r.PathPrefix("/public/").Handler(NotFoundHook{http.StripPrefix("/public/", http.FileServer(http.Dir("public")))})
 
 	r.HandleFunc("/bracket/{serie}", BracketShowHandler)
+	r.HandleFunc("/signup", SignUp)
+	r.HandleFunc("/createbracket", CreateBracket)
+	r.HandleFunc("/SignupSubmit", SignupSubmit)
 	r.HandleFunc("/", Bracket)
 
 	log.Println("Server started...")
