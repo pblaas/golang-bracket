@@ -1,79 +1,81 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-<title>Patrick's GO Bracket</title>
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
-<link rel="stylesheet" href="/public/jquery.bracket.min.css">
-<link rel="stylesheet" href="/public/jquery.bracket-site.css">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<script src="/public/jquery.bracket.min.js"></script>
-<script type="text/javascript">
-$(function() {
-    var demos = ['minimal']
-    $.each(demos, function(i, d){
-      var demo = $('div#'+d)
-      $('<div class="demo"></div>').appendTo(demo)
-    })
-  })
-</script>
-    <style type="text/css">
-      body {
-        background: #eee;
-        font-family: Helvetica, Arial, sans-serif;
-      }
-      #footer {
-        font-size: 13px;
-        color: #aaa;
-        text-align: center;
-        width: 600px;
-        margin: 30px auto;
-        padding: 0.5em;
-        text-shadow: 0px 1px 1px #fff;
-        border-top: 1px dotted #ddd;
-      }
-      #footer a {
-        color: #0af;
-        text-decoration: none;
-      }
-    </style>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="../../favicon.ico">
+
+    <title>GoLang Bracket</title>
+
+     <!-- Bootstrap core CSS -->
+     <link href="https://getbootstrap.com/dist/css/bootstrap.min.css" rel="stylesheet">
+     <!-- Custom styles for this template 
+    <link href="https://getbootstrap.com/examples/navbar/navbar.css" rel="stylesheet">
+      -->
+
+  </head>
+
+  <body>
+
+    <!-- Static navbar -->
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">Golang Bracket</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="/registertobracket">Register to bracket</a></li>
+            <li><a href="/signup">Signup</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Bracket <span class="caret"></span></a>
+              <ul class="dropdown-menu">
+                <li><a href="/createbracket">Create new brackets</a></li>
+                <li><a href="/listopenbrackets">List open brackets</a></li>
+                <li><a href="/listfinishedbrackets">List finished brackets</a></li>
+                <li role="separator" class="divider"></li>
+                <li><a href="#">Edit bracket</a></li>
+                <li><a href="#">Delete bracket</a></li>
+              </ul>
+            </li>
+          </ul>
+          <ul class="nav navbar-nav navbar-right">
+            <li><a href="/about/">About</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </nav>
 
 
-</head>
+    <div class="container">
 
-<div id="minimal">
-  <b>Serie:Xxxx</b>
-  <script type="text/javascript">
-  var minimalData = {
-      teams : [
-        ["Team 1", "Team 2"], /* first matchup */
-        ["Team 3", "Team 4"],  /* second matchup */
-        ["Team 5", "Team 6"],  /* second matchup */
-        ["Team 7", "Team 8"],  /* second matchup */
-      ],
-      results : [
-        [[1,0], [0,1], [1,0], [0,1]],       /* first round */
-        [[1,0], [0,1]],        /* second round */
-        [[1,0], [0,1]],        /* second round */
-      ]
-    }
+      <!-- Main component for a primary marketing message or call to action -->
+      <div class="jumbotron">
+        <h1>Golang Bracket</h1>
+	<p>Golang Bracket is a project by Patrick Blaas en Sander Hendrikse</p>
+      </div>
 
-  $(function() {
-      $('#minimal .demo').bracket({
-        init: minimalData /* data to initialize the bracket with */ })
-    })
-  </script>
-</div>
+    </div> <!-- /container -->
 
- <div id="footer">
-      <a href="https://github.com/pblaas/golang-bracket">Go Bracket</a> is an open-source <a href="http://golang.org">Go language</a> App by
-      <strong><a href="https://github.com/pblaas">Pblaas</a></strong> based on: <br>
-      <a href="https://golang.org">Go language</a> |
-      <a href="https://www.mongodb.org">MongoDB</a> |
-      <a href="https://labix.org/mgo">mgo driver</a> |
-      <a href="http://getbootstrap.com/css/">CSS boostrap</a> |
-      <a href="https://github.com/teijo/jquery-bracket">Teijo bracket library</a> 
- </div>
-
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+    <script src="https://getbootstrap.com/dist/js/bootstrap.min.js"></script>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="https://getbootstrap.com/assets/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
 </html>
+
