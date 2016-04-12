@@ -113,6 +113,33 @@ func CreateBracket(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
+
+func GracketShowIndex(w http.ResponseWriter, r *http.Request) {
+	fp := path.Join("templates", "gracketindex.html")
+	tmpl, err := template.ParseFiles(fp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := tmpl.Execute(w, ""); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func GracketShowHandler(w http.ResponseWriter, r *http.Request) {
+	fp := path.Join("templates", "gracketmatch.html")
+	tmpl, err := template.ParseFiles(fp)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	if err := tmpl.Execute(w, ""); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
 func SignupSubmit(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	session, err := mgo.Dial("localhost")
@@ -193,6 +220,8 @@ func main() {
 	r.HandleFunc("/createbracket", CreateBracket)
 	r.HandleFunc("/SignupSubmit", SignupSubmit)
 	r.HandleFunc("/", Bracket)
+	r.HandleFunc("/gracket", GracketShowIndex)
+	r.HandleFunc("/gracket/{serie}", GracketShowHandler)
 
 	log.Println("Server started...")
 	http.ListenAndServe(":3099", r)
